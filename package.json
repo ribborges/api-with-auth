@@ -1,0 +1,20 @@
+{
+  "name": "api-with-auth",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch --env-file .env src/server.ts",
+    "build": "tsup src --format esm",
+    "start": "node dist/server.mjs"
+  },
+  "keywords": [],
+  "author": "Richard de Carvalho Borges",
+  "license": "MPL-2.0",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.0.2",
+    "tsup": "^8.2.3",
+    "tsx": "^4.16.3",
+    "typescript": "^5.5.4"
+  }
+}
