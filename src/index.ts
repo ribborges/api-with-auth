@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { uri, client, setupDB, connectDB } from './database/db';
+import router from 'router';
 
 const app = express();
 
@@ -26,4 +27,4 @@ server.listen(4000, () => {
     console.log('Server is running on port 4000');
 });
 
-connectDB();
+app.use('/', router());

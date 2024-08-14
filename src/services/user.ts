@@ -11,10 +11,17 @@ const getUserByEmail = async (email: string): Promise<WithId<Document> | null> =
         const collection = db.collection(collectionName);
 
         const user = await collection.findOne({ email }) as WithId<Document> | null;
+
+        if (!user) {
+            console.log('User not found');
+            return null;
+        }
+
+        console.log('User:', user);
         return user; // Returns the user document if found, or null if not
     } catch (error) {
-        console.error('Erro ao buscar usuário:', error);
-        throw new Error('Erro ao buscar usuário');
+        console.error('Error when searching for user:', error);
+        throw new Error('Error when searching for user');
     } finally {
         await closeDB();
     }
@@ -34,6 +41,12 @@ const createUser = async (username: string, email: string, password: string, sal
         };
 
         const result = await collection.insertOne(user);
+        if (!result.acknowledged) {
+            console.log('Error creating user');
+            throw new Error('Error creating user');
+        }
+
+        console.log('User created:', result);
         return result; // Returns the user document
     } catch (error) {
         console.error('Error creating user:', error);
