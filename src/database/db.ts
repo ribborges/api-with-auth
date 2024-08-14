@@ -11,6 +11,8 @@ const client = new MongoClient(uri!, {
     }
 });
 
+const dbName = 'api-db';
+
 // Connect to the MongoDB database
 async function connectDB() {
     try {
@@ -21,11 +23,21 @@ async function connectDB() {
     }
 }
 
+// Close the MongoDB connection
+async function closeDB() {
+    try {
+        await client.close();
+        console.log('Closed MongoDB connection');
+    } catch (error) {
+        console.error('Error closing MongoDB connection:', error);
+    }
+}
+
 // Setup the database
 async function setupDB() {
     try {
         // Connect to the MongoDB database (and create if it doesn't exist)
-        const database = client.db('api-db');
+        const database = client.db(dbName);
 
         // Create a collection if it doesn't exist
         await database.createCollection('user');
@@ -37,4 +49,4 @@ async function setupDB() {
     }
 }
 
-export { uri, client, connectDB, setupDB };
+export { uri, client, dbName, connectDB, closeDB, setupDB };
