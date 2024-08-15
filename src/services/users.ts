@@ -19,7 +19,7 @@ const getUsers = async () => {
     } finally {
         await closeDB();
     }
-}
+};
 
 const deleteUserById = async (id: string) => {
     try {
@@ -37,6 +37,40 @@ const deleteUserById = async (id: string) => {
     } finally {
         await closeDB();
     }
-}
+};
 
-export { getUsers, deleteUserById };
+const getUserById = async (id: string) => {
+    try {
+        await connectDB();
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+
+        const user = await collection.findOne({ _id: new ObjectId(id) });
+
+        console.log('User:', user);
+        return user; // Returns the user document if found, or null if not        
+    } catch (error) {
+        console.error('Error getting user by ID:', error);
+        throw new Error('Error getting user by ID');
+    } finally {
+        await closeDB();
+    }
+};
+
+const updateUserById = async (id: string, username: string) => {
+    try {
+        await connectDB();
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+
+        const result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: { username } });
+
+        console.log('Updated:', result);
+        return result; // Returns an UpdateResult object
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw new Error('Error updating user');
+    }
+};
+
+export { getUsers, deleteUserById, getUserById, updateUserById };

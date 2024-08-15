@@ -40,7 +40,7 @@ const login = async (req: Request, res: Response) => {
         console.error('Error logging in user:', error);
         return res.status(500).json({ message: 'Error logging in user' });
     }
-}
+};
 
 // Register a new user
 const register = async (req: Request, res: Response) => {
@@ -80,6 +80,6 @@ const register = async (req: Request, res: Response) => {
         console.error('Error registering user:', error);
         return res.status(500).json({ message: 'Error registering user' });
     }
-}
+};
 
 export { login, register };

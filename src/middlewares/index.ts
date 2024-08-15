@@ -19,7 +19,7 @@ const isOwner = async (req: Request, res: Response, next: NextFunction) => {
         console.log('Error checking ownership:', error);
         return res.status(500).json({ message: 'Error checking ownership' });        
     }
-}
+};
 
 const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -42,6 +42,6 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction) 
         console.log('Error authenticating user:', error);
         return res.status(500).json({ message: 'Error authenticating user' });
     }
-}
+};
 
 export { isOwner, isAuthenticated };
