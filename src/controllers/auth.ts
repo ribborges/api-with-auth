@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
 
-import { getUserByEmail, createUser, getUserByUsername, updateSessionToken } from 'services/user';
+import { getUserByEmail, createUser, getUserByUsername, updateSessionToken } from 'services/auth';
 import { authentication, random } from 'helpers';
 
 const login = async (req: Request, res: Response) => {

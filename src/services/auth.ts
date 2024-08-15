@@ -1,7 +1,7 @@
-import { WithId } from 'mongodb';
+import { WithId } from "mongodb";
 
+import { client, closeDB, connectDB, dbName } from 'database/db';
 import { UserSchema } from 'types/user';
-import { client, dbName, connectDB, closeDB } from 'database/db';
 
 const collectionName = 'user';
 
@@ -26,7 +26,7 @@ const getUserByUsername = async (username: string): Promise<WithId<Document> | n
     } finally {
         await closeDB();
     }
-}
+};
 
 const getUserByEmail = async (email: string): Promise<WithId<Document> | null> => {
     try {
@@ -72,7 +72,7 @@ const getUserBySessionToken = async (sessionToken: string): Promise<WithId<Docum
     } finally {
         await closeDB();
     }
-}
+};
 
 const updateSessionToken = async (username: string, sessionToken: string) => {
     try {
@@ -95,7 +95,7 @@ const updateSessionToken = async (username: string, sessionToken: string) => {
     } finally {
         await closeDB();
     }
-}
+};
 
 const createUser = async (user: UserSchema) => {
     try {
@@ -118,6 +118,6 @@ const createUser = async (user: UserSchema) => {
     } finally {
         await closeDB();
     }
-}
+};
 
 export { getUserByUsername, getUserByEmail, getUserBySessionToken, updateSessionToken, createUser };
