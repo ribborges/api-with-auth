@@ -1,8 +1,32 @@
 import { WithId } from 'mongodb';
+
+import { UserSchema } from 'types/user';
 import { client, dbName, connectDB, closeDB } from 'database/db';
-import { authentication } from 'helpers';
 
 const collectionName = 'user';
+
+const getUserByUsername = async (username: string): Promise<WithId<Document> | null> => {
+    try {
+        await connectDB();
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+
+        const user = await collection.findOne({ username }) as WithId<Document> | null;
+
+        if (!user) {
+            console.log('User not found');
+            return null;
+        }
+
+        console.log('User:', user);
+        return user; // Returns the user document if found, or null if not
+    } catch (error) {
+        console.error('Error when searching for user:', error);
+        throw new Error('Error when searching for user');
+    } finally {
+        await closeDB();
+    }
+}
 
 const getUserByEmail = async (email: string): Promise<WithId<Document> | null> => {
     try {
@@ -27,20 +51,60 @@ const getUserByEmail = async (email: string): Promise<WithId<Document> | null> =
     }
 };
 
-const createUser = async (username: string, email: string, password: string, salt: string) => {
+const getUserBySessionToken = async (sessionToken: string): Promise<WithId<Document> | null> => {
     try {
         await connectDB();
         const db = client.db(dbName);
         const collection = db.collection(collectionName);
 
-        const user = {
-            username,
-            email,
-            password: authentication(salt, password),
-            salt
-        };
+        const user = await collection.findOne({ 'authentication.sessionToken': sessionToken }) as WithId<Document> | null;
+
+        if (!user) {
+            console.log('User not found');
+            return null;
+        }
+
+        console.log('User:', user);
+        return user; // Returns the user document if found, or null if not
+    } catch (error) {
+        console.error('Error when searching for user:', error);
+        throw new Error('Error when searching for user');
+    } finally {
+        await closeDB();
+    }
+}
+
+const updateSessionToken = async (username: string, sessionToken: string) => {
+    try {
+        await connectDB();
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+
+        const result = await collection.updateOne({ username }, { $set: { 'authentication.sessionToken': sessionToken } });
+
+        if (!result.acknowledged) {
+            console.log('Error updating session token');
+            throw new Error('Error updating session token');
+        }
+
+        console.log('Session token updated:', result);
+        return result; // Returns the update result
+    } catch (error) {
+        console.error('Error updating session token:', error);
+        throw new Error('Error updating session token');
+    } finally {
+        await closeDB();
+    }
+}
+
+const createUser = async (user: UserSchema) => {
+    try {
+        await connectDB();
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
 
         const result = await collection.insertOne(user);
+
         if (!result.acknowledged) {
             console.log('Error creating user');
             throw new Error('Error creating user');
@@ -56,4 +120,4 @@ const createUser = async (username: string, email: string, password: string, sal
     }
 }
 
-export { getUserByEmail, createUser };
+export { getUserByUsername, getUserByEmail, getUserBySessionToken, updateSessionToken, createUser };
