@@ -29,6 +29,13 @@ This project is a REST API built with TypeScript and Express. It includes authen
     npm install
     ```
 
+## ENV variables
+
+```sh
+    DB_URI=your_mongodb_uri
+    SECRET=secret_for_password_crypto
+```
+
 ## Running the Project
 
 1. Start the development server:
